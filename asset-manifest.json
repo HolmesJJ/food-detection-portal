@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/food-detection-portal/static/css/main.e6c13ad2.css",
-    "main.js": "/food-detection-portal/static/js/main.26dd322a.js",
+    "main.js": "/food-detection-portal/static/js/main.44d4a80e.js",
     "static/js/787.53aaaa78.chunk.js": "/food-detection-portal/static/js/787.53aaaa78.chunk.js",
     "index.html": "/food-detection-portal/index.html",
     "main.e6c13ad2.css.map": "/food-detection-portal/static/css/main.e6c13ad2.css.map",
-    "main.26dd322a.js.map": "/food-detection-portal/static/js/main.26dd322a.js.map",
+    "main.44d4a80e.js.map": "/food-detection-portal/static/js/main.44d4a80e.js.map",
     "787.53aaaa78.chunk.js.map": "/food-detection-portal/static/js/787.53aaaa78.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.26dd322a.js"
+    "static/js/main.44d4a80e.js"
   ]
 }
