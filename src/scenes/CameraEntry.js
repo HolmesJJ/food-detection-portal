@@ -107,7 +107,7 @@ function CameraEntry() {
         }
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        ctx.drawImage(video, 0, 0, video.videoHeight, video.videoWidth);
         const imgStr = canvas.toDataURL('image/png');
         const base64Img = imgStr.split(';base64,').pop();
         // close camera
