@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { useCameraEntry as useStyles } from "../styles/Camera";
 
 function CameraEntry() {
-  const width = 1920;
-  const height = 1080;
+  const width = 1280;
+  const height = 720;
   const styles = useStyles();
 
   const [showCamera, setShowCamera] = React.useState(false);
@@ -23,7 +23,7 @@ function CameraEntry() {
       video: {
         width: width,
         height: height,
-        // facingMode: { exact: 'environment' }
+        facingMode: { exact: 'environment' }
       },
     };
     navigator.mediaDevices.getUserMedia(opt).then((stream) => {
