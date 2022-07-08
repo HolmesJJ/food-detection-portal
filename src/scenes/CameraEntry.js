@@ -23,7 +23,7 @@ function CameraEntry() {
       video: {
         width: width,
         height: height,
-        // facingMode: { exact: 'environment' }
+        facingMode: { exact: 'environment' }
       },
     };
     navigator.mediaDevices.getUserMedia(opt).then((stream) => {
