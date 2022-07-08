@@ -12,13 +12,23 @@ export const useCameraEntry = makeStyles(() => ({
   button: {
     margin: 20,
   },
+  cameraContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    display: 'flex',
+  },
   camera: {
-    height: '100%',
-    width: '100%',
+    width: 480,
+    height: 640,
+  },
+  canvasContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    display: 'flex',
   },
   canvas: {
-    height: '100%',
-    width: '100%',
+    width: 480,
+    height: 640,
   },
   link: {
     textDecoration: 'none',

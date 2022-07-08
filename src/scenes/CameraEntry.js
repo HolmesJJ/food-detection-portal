@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { useCameraEntry as useStyles } from "../styles/Camera";
 
 function CameraEntry() {
-  const width = 1280;
-  const height = 720;
+  const width = 480;
+  const height = 640;
   const styles = useStyles();
 
   const [showCamera, setShowCamera] = React.useState(false);
@@ -107,7 +107,7 @@ function CameraEntry() {
         }
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(video, 0, 0, video.videoHeight, video.videoWidth);
+        ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
         const imgStr = canvas.toDataURL('image/png');
         const base64Img = imgStr.split(';base64,').pop();
         // close camera
@@ -171,20 +171,25 @@ function CameraEntry() {
         <button onClick={close} className={styles.button}>Close Camera</button>
       </div>
       {showCamera ?
-        <video
-          id="camera"
-          ref={cameraRef}
-          className={styles.camera}
-        /> : null
+        <div className={styles.cameraContainer}>
+          <video
+            id="camera"
+            ref={cameraRef}
+            className={styles.camera}
+          />
+        </div>
+        : null
       }
       {showCanvas ?
-        <canvas
-          id="canvas"
-          ref={canvasRef}
-          width={width}
-          height={height}
-          className={styles.canvas}
-        /> : null
+        <div className={styles.canvasContainer}>
+          <canvas
+            id="canvas"
+            ref={canvasRef}
+            width={width}
+            height={height}
+            className={styles.canvas}
+          />
+        </div> : null
       }
       <div className={styles.buttonContainer}>
         <button onClick={detect} className={styles.button}>Detect</button>
