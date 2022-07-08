@@ -4,11 +4,12 @@ import CameraEntry from './scenes/CameraEntry';
 import MenusEntry from './scenes/MenusEntry';
 
 function App() {
+  const appName = 'food-detection-portal';
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<CameraEntry />}></Route>
-        <Route path="/menus" element={<MenusEntry />}></Route>
+        <Route path={appName + "/"} element={<CameraEntry />}></Route>
+        <Route path={appName + "/menus"} element={<MenusEntry />}></Route>
       </Routes>
     </BrowserRouter>
   );

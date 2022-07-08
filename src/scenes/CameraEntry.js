@@ -15,6 +15,7 @@ function CameraEntry() {
   const cameraRef = React.useRef(null);
   const canvasRef = React.useRef(null);
 
+  // open camera ---> hide canvas
   const openCamera = () => {
     setShowCanvas(false);
     const opt = {
@@ -27,7 +28,7 @@ function CameraEntry() {
     };
     navigator.mediaDevices.getUserMedia(opt).then((stream) => {
       const video = cameraRef.current;
-      // Old browsers may not have srcObject
+      // old browsers may not have srcObject
       if ('srcObject' in video) {
         video.srcObject = stream;
       }
@@ -39,6 +40,7 @@ function CameraEntry() {
     });
   };
 
+  // close camera
   const closeCamera = () => {
     const video = cameraRef.current;
     if ('srcObject' in video) {
@@ -53,21 +55,7 @@ function CameraEntry() {
     setShowCamera(false);
   };
 
-  const getFrame = () => {
-    const video = cameraRef.current;
-    const canvas = canvasRef.current;
-    if (canvas == null) {
-      return;
-    }
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-    const imgStr = canvas.toDataURL('image/png');
-    const base64Img = imgStr.split(';base64,').pop();
-    closeCamera();
-    return base64Img;
-  };
-
+  // when show button is clicked ---> open camera ---> hide canvas
   const show = () => {
     if (showCamera) {
       return;
@@ -75,6 +63,7 @@ function CameraEntry() {
     setShowCamera(true);
   };
 
+  // when close button is clicked ---> close camera
   const close = () => {
     if (!showCamera) {
       return;
@@ -82,29 +71,13 @@ function CameraEntry() {
     closeCamera();
   };
 
+  // when detect button is clicked ---> show canvas
+  // ---> detect image ---> data updated ---> close camera 
   const detect = () => {
     if (!showCamera) {
       return;
     }
     setShowCanvas(true);
-  };
-
-  const upload = async () => {
-    const base64Img = getFrame();
-    const options = {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        "image": base64Img,
-      }),
-    };
-    const response = await fetch('http://192.168.0.58:8000/detect', options);
-    const data = await response.json();
-    if (data.code === 0) {
-      setData(data.data);
-    }
   };
 
   const getRandomColor = () => {
@@ -116,14 +89,67 @@ function CameraEntry() {
     return color;
   }
 
-  const draw = () => {
+  React.useEffect(() => {
+    if (showCamera) {
+      openCamera();
+    }
+  }, [showCamera]);
+
+  // detect image ---> data updated ---> close camera 
+  React.useEffect(() => {
+    if (showCanvas) {
+      const request = async () => {
+        // get image
+        const video = cameraRef.current;
+        const canvas = canvasRef.current;
+        if (canvas == null) {
+          return;
+        }
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        const imgStr = canvas.toDataURL('image/png');
+        const base64Img = imgStr.split(';base64,').pop();
+        // close camera
+        if ('srcObject' in video) {
+          const stream = video.srcObject;
+          if ('getTracks' in stream) {
+            const tracks = stream.getTracks();
+            tracks.forEach(track => {
+              track.stop();
+            });
+          }
+        }
+        setShowCamera(false);
+        // upload image
+        const options = {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify({
+            "image": base64Img,
+          }),
+        };
+        const response = await fetch('http://192.168.0.58:8000/detect', options);
+        const data = await response.json();
+        // data updated
+        if (data.code === 0) {
+          setData(data.data);
+        }
+      }
+      request();
+    }
+  }, [showCanvas]);
+
+  // data updated
+  React.useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas == null) {
       return;
     }
     const ctx = canvas.getContext('2d');
     ctx.lineWidth = 3;
-    // const showLabels = [];
     for (let i = 0; i < data.length; i++) {
       const color = getRandomColor();
       ctx.strokeStyle = color;
@@ -136,25 +162,6 @@ function CameraEntry() {
       ctx.font = "18px Arial";
       ctx.fillText(data[i].name + " " + (data[i].score * 100).toFixed(1), x1, y1 - 8);
     }
-}
-
-  React.useEffect(() => {
-    if (showCamera) {
-      openCamera();
-    }
-  }, [showCamera]);
-
-  React.useEffect(() => {
-    if (showCanvas && showCamera) {
-      upload();
-    }
-  }, [showCanvas]);
-
-  React.useEffect(() => {
-    if (!showCanvas) {
-      return;
-    }
-    draw();
   }, [data]);
 
   return (
@@ -182,7 +189,7 @@ function CameraEntry() {
       <div className={styles.buttonContainer}>
         <button onClick={detect} className={styles.button}>Detect</button>
         <Link
-          to={'/menus'}
+          to={'menus'}
           state={ [...new Set(data.map((item) => item.name))] }
           className={styles.link}
         >
