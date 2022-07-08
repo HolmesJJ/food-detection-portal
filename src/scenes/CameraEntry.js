@@ -131,7 +131,7 @@ function CameraEntry() {
             "image": base64Img,
           }),
         };
-        const response = await fetch('http://192.168.0.58:8000/detect', options);
+        const response = await fetch('https://ec7f-180-129-102-25.ap.ngrok.io/detect', options);
         const data = await response.json();
         // data updated
         if (data.code === 0) {
