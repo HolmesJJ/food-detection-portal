@@ -4,9 +4,8 @@ import { Link } from 'react-router-dom';
 import { useCameraEntry as useStyles } from "../styles/Camera";
 
 function CameraEntry() {
-  // width and height are opposite on phone
   const width = 640;
-  const height = 480;
+  const height = 640;
   const styles = useStyles();
 
   const [showCamera, setShowCamera] = React.useState(false);
